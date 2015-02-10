@@ -20,9 +20,9 @@ public class Sprite {
 	public static Sprite player = new Sprite("/player.png");
 	public static Sprite player_duck = new Sprite("/player_duck.png");
 
-	public static Sprite fence = new Sprite("/fence.png");
-	public static Sprite half_fence = new Sprite("/half_fence.png");
-	public static Sprite full_fence = new Sprite("/full_fence.png");
+	public static Sprite fence_part_0 = new Sprite("/FencePart0.png");
+	public static Sprite fence_part_1 = new Sprite("/FencePart1.png");
+	public static Sprite fence_part_2 = new Sprite("/FencePart2.png");
 
 	private static Sprite volume_bar = new Sprite("/volume_bar.png");
 	public static Sprite volume_minus = new Sprite(volume_bar, 0, 0, 89, 97);

@@ -23,7 +23,7 @@ public class Level {
 	private int lvl = 0;
 	private Snowman sm;
 	private Player player;
-	private Fence fence;
+	private Fence[] fence = new Fence[3];
 
 	public Level(Game game) {
 		this.game = game;
@@ -49,8 +49,9 @@ public class Level {
 		sm.init(this);
 		player = new Player(16, h - 128);
 		player.init(this);
-		fence = new Fence(100, h - 128);
-		fence.init(this);
+		for (int i = 0; i < fence.length; i++) {
+			fence[i] = new Fence(128 + i * 42, h - 128, i);
+		}
 	}
 
 	private void clearAll() {
@@ -84,18 +85,21 @@ public class Level {
 				return;
 			}
 		}
+		for (int i = 0; i < fence.length; i++) {
+			if (fence[i] != null) {
+				fence[i].update(game);
+				if (fence[i].isRemoved()) {
+					fence[i] = null;
+				}
+			}
+		}
 		for (int i = 0; i < children.size(); i++) {
 			children.get(i).update(game);
 			if (children.get(i).isRemoved()) {
 				children.remove(i);
 			}
 		}
-		if (fence != null) {
-			fence.update(game);
-			if (fence.isRemoved()) {
-				fence = null;
-			}
-		}
+
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(game);
 			if (projectiles.get(i).isRemoved()) {
@@ -117,12 +121,16 @@ public class Level {
 		for (int i = 0; i < children.size(); i++) {
 			children.get(i).render(game);
 		}
-		if (fence != null) fence.render(game);
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).render(game);
 		}
 		for (int i = 0; i < texts.size(); i++) {
 			texts.get(i).render(game);
+		}
+		for (int i = 0; i < fence.length; i++) {
+			if (fence[i] != null) {
+				fence[i].render(game);
+			}
 		}
 	}
 
@@ -140,10 +148,6 @@ public class Level {
 
 	public Snowman getSnowman() {
 		return sm;
-	}
-
-	public Fence getFence() {
-		return fence;
 	}
 
 	public List<Projectile> getProjectiles() {

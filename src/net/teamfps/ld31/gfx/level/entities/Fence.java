@@ -4,29 +4,20 @@ import net.teamfps.ld31.gfx.Game;
 import net.teamfps.ld31.gfx.Sprite;
 
 public class Fence extends Mob {
-
-	public Fence(int x, int y) {
+	public Fence(int x, int y, int part) {
 		this.x = x;
 		this.y = y;
-		this.hp = 100;
+		this.hp = 25;
 		this.max_hp = hp;
-		this.name = "Fence";
-		this.w = 128;
+		this.name = "Fence" + part;
+		this.w = 42;
 		this.h = 64;
-		this.sprite = Sprite.full_fence;
+		Sprite[] sprites = { Sprite.fence_part_0, Sprite.fence_part_1, Sprite.fence_part_2 };
+		if (part >= 0 && part <= sprites.length - 1) this.sprite = sprites[part];
 	}
 
 	@Override
 	public void update(Game game) {
-		double one = max_hp / 3;
-		double two = max_hp - one;
-		if (hp <= two) {
-			sprite = Sprite.half_fence;
-
-		}
-		if (hp <= one) {
-			sprite = Sprite.fence;
-		}
 		if (hp <= 0) {
 			remove();
 		}
@@ -35,7 +26,7 @@ public class Fence extends Mob {
 	@Override
 	public void render(Game game) {
 		game.renderSprite(sprite, x, y, w, h);
-		renderInfo(game, x, y + 62);
+//		renderInfo(game, x, y + 62, true, false, false);
 	}
 
 }

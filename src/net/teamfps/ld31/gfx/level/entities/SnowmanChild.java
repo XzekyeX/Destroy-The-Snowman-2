@@ -8,7 +8,6 @@ import net.teamfps.ld31.gfx.Sprite;
 import net.teamfps.ld31.gfx.level.Level;
 import net.teamfps.ld31.gfx.level.entities.task.DestroyTask;
 import net.teamfps.ld31.gfx.level.entities.task.Task;
-import net.teamfps.ld31.gfx.level.entities.task.WalkTask;
 
 public class SnowmanChild extends Mob {
 	private Snowman snowman;
@@ -29,9 +28,9 @@ public class SnowmanChild extends Mob {
 	@Override
 	public void init(Level level) {
 		super.init(level);
-		Fence f = level.getFence();
+		// Fence f = level.getFence();
 		Player p = level.getPlayer();
-		tasks.add(new DestroyTask(this, f, 0.005D));
+		// tasks.add(new DestroyTask(this, f, 0.005D));
 		tasks.add(new DestroyTask(this, p, 0.005D));
 	}
 

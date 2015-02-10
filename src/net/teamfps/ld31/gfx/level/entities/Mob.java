@@ -81,6 +81,15 @@ public abstract class Mob extends Entity {
 		game.renderString(getName(), 12, x, y - 42, 0xffffff);
 	}
 
+	public void renderInfo(Game game, int x, int y, boolean name, boolean health, boolean healthRect) {
+		double max = (hp / max_hp);
+		if (healthRect) game.renderFillRect(x, y - 16, (int) (w * max), 8, 0xff0000);
+		String hp = String.format("%.2f", getHp());
+		String max_hp = String.format("%.2f", getMax_Hp());
+		if (health) game.renderString("" + hp + "/" + max_hp, 12, x, y - 22, 0xffffff);
+		if (name) game.renderString(getName(), 12, x, y - 42, 0xffffff);
+	}
+
 	public boolean isDead() {
 		return (hp <= 0);
 	}

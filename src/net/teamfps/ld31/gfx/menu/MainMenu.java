@@ -70,7 +70,7 @@ public class MainMenu extends Menu {
 			buttons.get(i).render(game);
 		}
 		Button button = getButton(selected);
-		System.out.println("button: " + button);
+		// System.out.println("button: " + button);
 		if (button != null) {
 			int bx = button.getX();
 			int by = button.getY();
