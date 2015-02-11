@@ -8,8 +8,10 @@ public abstract class Projectile extends Mob {
 	protected double xx, yy;
 	protected double nx, ny;
 	protected double speed, range, damage;
+	protected Entity shooter;
 
-	public Projectile(int x, int y, double dir) {
+	public Projectile(Entity shooter, int x, int y, double dir) {
+		this.shooter = shooter;
 		xOrigin = x;
 		yOrigin = y;
 		angle = dir;
@@ -29,5 +31,9 @@ public abstract class Projectile extends Mob {
 	public abstract void render(Game game);
 
 	protected abstract void move();
+
+	public Entity getShooter() {
+		return shooter;
+	}
 
 }

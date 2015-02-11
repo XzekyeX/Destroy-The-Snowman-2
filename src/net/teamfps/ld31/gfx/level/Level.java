@@ -162,4 +162,8 @@ public class Level {
 		return lvl;
 	}
 
+	public Fence[] getFence() {
+		return fence;
+	}
+
 }

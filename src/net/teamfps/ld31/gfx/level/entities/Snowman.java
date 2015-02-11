@@ -27,7 +27,7 @@ public class Snowman extends Mob {
 		if (hp <= 0) remove();
 		if (level != null && level.getPlayer() != null) {
 			ShootTimer++;
-			if (ShootTimer >= 32 && bullets > 0) {
+			if (ShootTimer >= 128 && bullets > 0) {
 				ShootTimer = 0;
 				bullets--;
 				Shoot(x + (w / 2), y + (h / 2), level.getPlayer(), 2, 700, 2);

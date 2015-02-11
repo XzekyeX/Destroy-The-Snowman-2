@@ -13,18 +13,21 @@ public class DestroyTask extends Task {
 		this.walker = walker;
 		this.target = target;
 		this.damage = damage;
-		task = new WalkTask(walker, target.getX() + 64, target.getY(), true, false);
+		if (target == null || walker == null) return;
+		task = new WalkTask(walker, target.getX() + 32, target.getY(), true, false);
 	}
 
 	@Override
 	public boolean activate() {
-		return !target.isDead() && task.activate();
+		return task != null && !target.isDead() && task.activate();
 	}
 
 	@Override
 	public void execute() {
-		task.execute();
-		if (walker.Collision(target)) {
+		if (task != null) {
+			task.execute();
+		}
+		if (walker != null && target != null && walker.Collision(target)) {
 			target.hurt(damage);
 		}
 	}

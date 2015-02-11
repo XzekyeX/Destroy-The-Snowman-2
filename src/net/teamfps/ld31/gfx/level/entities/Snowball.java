@@ -5,11 +5,9 @@ import java.util.List;
 import net.teamfps.ld31.gfx.Game;
 
 public class Snowball extends Projectile {
-	private Entity shooter;
 
 	public Snowball(Entity shooter, int x, int y, double dir) {
-		super(x, y, dir);
-		this.shooter = shooter;
+		super(shooter, x, y, dir);
 		this.w = 16;
 		this.h = 16;
 		this.range = 200.0D;
@@ -21,8 +19,7 @@ public class Snowball extends Projectile {
 	}
 
 	public Snowball(Entity shooter, int x, int y, double dir, double speed, double range, double damage) {
-		super(x, y, dir);
-		this.shooter = shooter;
+		super(shooter, x, y, dir);
 		this.w = 16;
 		this.h = 16;
 		this.range = range;
@@ -34,8 +31,7 @@ public class Snowball extends Projectile {
 	}
 
 	public Snowball(Entity shooter, int x, int y, int w, int h, double dir, double speed, double range, double damage) {
-		super(x, y, dir);
-		this.shooter = shooter;
+		super(shooter, x, y, dir);
 		this.w = w;
 		this.h = h;
 		this.range = range;
@@ -67,7 +63,7 @@ public class Snowball extends Projectile {
 			List<Projectile> projectiles = level.getProjectiles();
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile m = projectiles.get(i);
-				if (m != null && m != shooter && m != this) {
+				if (m != null && m != shooter && m != this && m.getShooter() != shooter) {
 					if (Collision(m)) {
 						m.hurt(damage);
 						// m.remove();
