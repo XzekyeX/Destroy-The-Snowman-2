@@ -75,8 +75,8 @@ public abstract class Mob extends Entity {
 	public void renderInfo(Game game, int x, int y) {
 		double max = (hp / max_hp);
 		game.renderFillRect(x, y - 16, (int) (w * max), 8, 0xff0000);
-		String hp = String.format("%.2f", getHp());
-		String max_hp = String.format("%.2f", getMax_Hp());
+		String hp = String.format("%.1f", getHp());
+		String max_hp = String.format("%.1f", getMax_Hp());
 		game.renderString("" + hp + "/" + max_hp, 12, x, y - 22, 0xffffff);
 		game.renderString(getName(), 12, x, y - 42, 0xffffff);
 	}

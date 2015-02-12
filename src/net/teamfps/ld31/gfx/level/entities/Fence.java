@@ -26,7 +26,10 @@ public class Fence extends Mob {
 	@Override
 	public void render(Game game) {
 		game.renderSprite(sprite, x, y, w, h);
-//		renderInfo(game, x, y + 62, true, false, false);
+		String hp = String.format("%.1f", getHp());
+		// String max_hp = String.format("%.1f", getMax_Hp());
+		game.renderString("" + hp, 12, x + 4, y + 20, 0x00ff00);
+		// renderInfo(game, x, y + 62, true, false, false);
 	}
 
 }

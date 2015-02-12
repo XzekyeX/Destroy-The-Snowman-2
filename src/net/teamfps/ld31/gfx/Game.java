@@ -1,7 +1,6 @@
 package net.teamfps.ld31.gfx;
 
 import java.awt.Graphics;
-import net.teamfps.ld31.Sound;
 import net.teamfps.ld31.gfx.menu.LoadMenu;
 import net.teamfps.ld31.gfx.menu.MainMenu;
 import net.teamfps.ld31.gfx.menu.Menu;

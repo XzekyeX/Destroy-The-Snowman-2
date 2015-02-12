@@ -1,171 +1,108 @@
 package net.teamfps.ld31.gfx.item;
 
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.teamfps.ld31.Input;
-import net.teamfps.ld31.Sound;
 import net.teamfps.ld31.gfx.Game;
 import net.teamfps.ld31.gfx.Status;
+import net.teamfps.ld31.gfx.level.entities.Mob;
 
 public class Item {
 	protected List<Status> stats = new ArrayList<Status>();
 	protected String name;
-	protected int level;
 
 	public Item(String name) {
 		this.name = name;
 	}
 
-	public int getLevel() {
-		int lvl = 0;
-		for (int i = 0; i < getStats().size(); i++) {
-			Status s = getStats().get(i);
-			if (s != null) {
-				lvl += (int) s.getValue();
-			}
-		}
-		int calc = lvl / getStats().size();
-		return calc;
-	}
-	
-	public int getMaxLevel() {
-		int lvl = 0;
-		for (int i = 0; i < getStats().size(); i++) {
-			Status s = getStats().get(i);
-			if (s != null) {
-				lvl += (int) s.getMax();
-			}
-		}
-		int calc = lvl / getStats().size();
-		return calc;		
-	}
-
 	private int delay = 20;
-	private int yp = 0;
-	private int h1 = 130;
-	private int max = 0;
-	private int scrollspeed = 10;
+	private int x, y, w, h;
+	private int sx, sy;
 
-	public void update(Game game, int x, int y, int w, int h) {
+	public void update(Game game) {
 		if (delay > 0) delay--;
-
-		max = getStats().size() * 26;
-		h1 = 200;
-		if (-yp > max - h1) {
-			yp = -max + h1;
-		}
-		if (yp > 0) {
-			yp = 0;
-		}
-
-		if (isMouseOverCollision(x, y, w, h)) {
-			if (Input.SCROLL == 1) {
-				Input.SCROLL = 0;
-				yp -= scrollspeed;
-			}
-			if (Input.SCROLL == -1) {
-				Input.SCROLL = 0;
-				yp += scrollspeed;
-			}
-		}
-		// System.out.println("y
-
-		for (int i = 0; i < getStats().size(); i++) {
-			int y1 = (int) (yp + i * 26) + 48;
-			if (!(y1 >= h1 + 32 || y1 <= 32)) {
-				Status s = getStats().get(i);
-				if (s != null) {
-					if (isMouseOverCollision(x + 16, y + y1, w - 32, 20)) {
-						if (Input.equalsKey(KeyEvent.VK_SHIFT)) {
-							if (Input.ML) {
-								double price = s.getPrice();
-								double value = s.getValue();
-								double max = s.getMax();
-								int p = (int) (value * price);
-								long m = game.getMoney();
-								// int a = m - p;
-								if (m >= p && !(max <= value)) {
-									game.loseMoney(p);
-									s.IncreaseValue(1.0D);
-									System.out.println(s.getName() + " has Upragaded!");
-								} else {
-									System.out.println("Not Enough Money Or Maxium Upgrade!");
-								}
-							}
-						} else {
-							if (Input.ML && delay == 0) {
-								delay = 20;
-								double price = s.getPrice();
-								double value = s.getValue();
-								double max = s.getMax();
-								int p = (int) (value * price);
-								long m = game.getMoney();
-								// int a = m - p;
-								if (m >= p && !(max <= value)) {
-									game.loseMoney(p);
-									s.IncreaseValue(1.0D);
-									System.out.println(s.getName() + " has Upragaded!");
-									Sound.powerup.play();
-								} else {
-									System.out.println("Not Enough Money Or Maxium Upgrade!");
-								}
-							}
-						}
-					}
+		if (stats.size() > 0) {
+			int m = 22;
+			for (int i = 0; i < stats.size(); i++) {
+				boolean over = isMouseOver(sx, sy + i * m, w, h);
+				String name = "" + stats.get(i).getName();
+				if (over) {
+					System.out.println("" + name);
 				}
 			}
 		}
 	}
 
-	public void render(Game screen, int x, int y, int w, int h) {
-		screen.renderFillRect(x, y, w, h, new Color(0, 0, 0, 160));
-		screen.renderRect(x, y, w, h, 0xffffff);
-		screen.renderRect(x, y, w, 32, 0xffffff);
-		screen.renderString(getName(), 16, x + 16, y + 24, 0xffffff);
-		for (int i = 0; i < getStats().size(); i++) {
-			int y1 = (int) (yp + i * 26) + 48;
-			if (!(y1 >= h1 + 32 || y1 <= 32)) {
-				int col = 0xffffff;
-				Status s = getStats().get(i);
-				if (s != null) {
-					String name = "" + s.getName();
-					double value = s.getValue();
-					double max = s.getMax();
-					double price = s.getPrice();
-					if (isMouseOverCollision(x + 16, y + y1, w - 32, 20)) {
-						col = 0xff0000;
-						int p = (int) (value * price);
-						long m = screen.getMoney();
-						
-						if (m >= p) {
-							screen.renderString("Price: " + p + "€", 12, x + 16, y + h - 8, 0x00ff00);
-						} else if(max <= value) {
-							System.out.println("max: " + max + ", value: " + value);
-							screen.renderString("Maximum upgrade!", 12, x + 16, y + h - 8, 0xff0000);														
-						} else {
-							screen.renderString("Not Enough Money! " + p + "€", 12, x + 16, y + h - 8, 0xff0000);							
-						}
-					}
-					screen.renderRect(x + 16, y + y1, w - 32, 20, col);
-					screen.renderString("" + name + ": " + value + "/" + max, 12, x + 20, y + y1 + 16, 0xffffff);
-				}
+	private Color col = new Color(255, 255, 255, 64);
+
+	public void render(Game game, int x, int y, int w, int h) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		game.renderFillRect(x, y, w, h, col);
+		game.renderRect(x, y, w, h, isMouseOver() ? 0xff0000 : 0xffffff);
+		game.renderString(name, 12, x + 4, y + h - 2, 0xffffff);
+		// if (isMouseOver() && (stats.size() > 0)) {
+		// renderStats(game, x + w + 48, y, w, h);
+		// }
+	}
+
+	public void renderStats(Game game, int x, int y, int w, int h) {
+		this.sx = x;
+		this.sy = y;
+		int m = 22;
+		int rh = stats.size() * m;
+		game.renderRect(x - 16, y - 16, w + 32, rh + 32, 0xffffff);
+		game.renderFillRect(x - 16, y - 16, w + 32, rh + 32, col);
+		for (int i = 0; i < stats.size(); i++) {
+			boolean over = isMouseOver(x, y + i * m, w, h);
+			String name = "" + stats.get(i).getName();
+			double lvl = stats.get(i).getLvl();
+			double maxlvl = stats.get(i).getMaxLvl();
+			double price = stats.get(i).getPrice();
+			String level = "" + String.format("%.1f", lvl) + "/" + String.format("%.1f", maxlvl);
+			game.renderFillRect(x, y + i * m, w, h, col);
+			game.renderRect(x, y + i * m, w, h, over ? 0xff0000 : 0xffffff);
+			game.renderString(name + " " + level, 12, x + 4, y + 14 + i * m, 0xffffff);
+			if (over) {
+				int ww = 128;
+				int hh = 48;
+				game.renderFillRect(x + w + 32, y + i * m, ww, hh, col);
+				game.renderRect(x + w + 32, y + i * m, ww, hh, 0xffffff);
+				game.renderRect(x + w + 32, y + i * m, ww, 20, 0xffffff);
+				game.renderString("Price", 12, x + w + (ww / 2) + 8, y + 16 + i * m, 0xffffff);
+				String p = "" + String.format("%.1f", price);
+				game.renderString("" + p + "$", 12, x + w + 40, y + 40 + i * m, 0x00ff00);
 			}
 		}
 	}
 
-	public boolean isMouseOverCollision(int x, int y, int w, int h) {
+	public boolean use(Mob user) {
+		return false;
+	}
+
+	public boolean isMouseOver(int x, int y, int w, int h) {
 		boolean over = false;
-		if (Input.MX >= x && Input.MX <= x + w && Input.MY >= y && Input.MY <= y + h) {
+		if (Input.DX >= x && Input.DX <= x + w && Input.DY >= y && Input.DY <= y + h) {
 			over = true;
 		}
 		return over;
 	}
 
-	public void add(String name, double value, double max, double price) {
-		stats.add(new Status(name, value, max, price));
+	public boolean isMouseOver() {
+		boolean over = false;
+		if (Input.DX >= x && Input.DX <= x + w && Input.DY >= y && Input.DY <= y + h) {
+			over = true;
+		}
+		return over;
+	}
+
+	public Item add(String name, double lvl, double max_lvl, double price) {
+		stats.add(new Status(name, lvl, max_lvl, price));
+		return this;
 	}
 
 	public Status getStatus(String name) {
@@ -185,4 +122,19 @@ public class Item {
 		return name;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getW() {
+		return w;
+	}
+
+	public int getH() {
+		return h;
+	}
 }
